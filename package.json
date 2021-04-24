@@ -2,7 +2,7 @@
   "name": "personal-budget-api",
   "version": "1.0.0",
   "description": "API to help customers manage their finances using the envelop bugdeting principles",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha",
     "start": "node server.js"
@@ -16,6 +16,7 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
+    "nodemon": "^2.0.7",
     "supertest": "^6.1.3"
   }
 }
