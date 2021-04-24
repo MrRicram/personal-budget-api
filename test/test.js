@@ -55,23 +55,33 @@ describe('root', () => {
         assert.equal(response.body.budget, 300);
       })
     })
+    describe('/transfer/:from/:to/:amount', () => {
+      it('throws an error if from id does not exist', async () => {
+
+      })
+    })
   })
   describe('PUT', () => {
     describe('/envelopes/:envelopId', () => {
       describe('/envelopes/:envelopeId', () => {
+        it('throws an error if id does not exist', async () => {
+          return await request(app)
+            .put('/envelopes/10?budget=400')
+            .expect(404);
+        })
         it('throws an error if new budget is not a number', async () => {
           await request(app)
-            .post('/envelopes?category=health&budget=300');
+            .post('/category=gifts&budget=200');
   
-          return request(app)
+          return await request(app)
             .put('/envelopes/1?budget=car')
             .expect(500);
         })
         it('returns a new envelope with updated budget', async () => {
           await request(app)
-            .post('/envelopes?category=health&budget=300');
+            .post('/envelopes?category=subscriptions&budget=250');
   
-          return request(app)
+          return await request(app)
             .put('/envelopes/1?budget=500')
             .expect(201)
             .then(response => {
@@ -80,6 +90,24 @@ describe('root', () => {
             });
         })
       })
+    })
+  })
+  describe('DELETE', () => {
+    it('throws an error for unknown id', async () => {
+      return await request(app)
+        .delete('/envelopes/10')
+        .expect(404);
+    })
+    it('returns the updated array', async () => {
+      const expectedArray = [{id: 1, category: 'health', budget: 500}, {id: 3, category: 'subscriptions', budget: 250}];
+
+      return await request(app)
+        .delete('/envelopes/2')
+        .expect(201)
+        .then(response => {
+          const actualArray = response.body;
+          expect(actualArray).to.eql(expectedArray);
+        })
     })
   })
 })
