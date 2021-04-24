@@ -4,12 +4,18 @@
   "description": "API to help customers manage their finances using the envelop bugdeting principles",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js"
   },
   "author": "Ricardo Ramos",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "chai": "^4.3.4",
+    "express": "^4.17.1",
+    "mocha": "^8.3.2",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "supertest": "^6.1.3"
   }
 }
