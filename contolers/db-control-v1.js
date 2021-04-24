@@ -1,7 +1,19 @@
+const { request } = require("express");
 const envelopesRouter = require("../server/envelopes");
 
-const envelopesArray = [];
-let envelopeId = 1;
+const envelopesArray = [
+    {
+        id: 1,
+        category: 'health',
+        budget: 300
+    },
+    {
+        id: 2,
+        category: 'gifts',
+        budget: 200
+    }
+];
+let envelopeId = 3;
 
 const getAllEnvelopes = () => {
     return envelopesArray;
@@ -62,13 +74,36 @@ const updateBudget = (envelope, query) => {
 
 const deleteEnvelopeById = envelope => {
     const index = envelopesArray.findIndex(el => el.id === Number(envelope.id));
-    if (index !== -1) {   
+    if (index !== -1) { 
         envelopesArray.splice(index, 1);
         return envelopesArray;
     }
     else {
         return null;
     }   
+}
+
+const transfer = req => {
+    let { from, to, amount } = req;
+    const indexFrom = envelopesArray.findIndex(el => el.id === Number(from));
+    const indexTo = envelopesArray.findIndex(el => el.id === Number(to));
+    amount = Number(amount);
+
+    if (indexFrom === -1 || indexTo === -1) {
+        return null;
+    }
+    else {
+        if (amount > envelopesArray[indexFrom].budget) {
+            return req;
+        }
+        else {
+            console.log(envelopesArray);
+            envelopesArray[indexFrom].budget -= amount;
+            envelopesArray[indexTo].budget += amount;
+            console.log(envelopesArray);
+            return envelopesArray;
+        }
+    }
 }
     
 
@@ -78,5 +113,6 @@ module.exports = {
     addEnvelope,
     getEvenlopeById,
     updateBudget,
-    deleteEnvelopeById
+    deleteEnvelopeById,
+    transfer
 }

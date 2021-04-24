@@ -9,7 +9,8 @@ const {
     addEnvelope,
     getEvenlopeById,
     updateBudget,
-    deleteEnvelopeById
+    deleteEnvelopeById,
+    transfer
 } = require('../contolers/db-control-v1');
 
 envelopesRouter.param('envelopeId', (req, res, next, id) => {
@@ -53,5 +54,24 @@ envelopesRouter.delete('/:envelopeId', (req, res, next) => {
     } 
     else {
         res.status(201).send(updatedEnvelopes);
+    }
+})
+
+envelopesRouter.post('/transfer/:from/:to/:amount', (req, res, next) => {
+    if (Number(req.params.amount) < 0) {
+        res.status(500).send();
+    }
+    else {
+        const updatedEnvelopes = transfer(req.params);
+        if (updatedEnvelopes === null) {
+            res.status(404).send();
+        } 
+        else if (updatedEnvelopes === req.params) {
+            res.status(400).send();
+        }
+        else {
+            res.status(201).send(updatedEnvelopes);
+        }
+    
     }
 })
